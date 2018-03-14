@@ -6,16 +6,12 @@
 #include <assimp/IOSystem.hpp>
 
 
-#ifdef JNI_LOG
 #ifdef ANDROID
 #include <android/log.h>
 #define lprintf(...) __android_log_print(ANDROID_LOG_VERBOSE, __func__, __VA_ARGS__)
 #else
 #define lprintf(...) printf (__VA_ARGS__)
 #endif /* ANDROID */
-#else
-#define lprintf 
-#endif
 
 static std::string gLastErrorString;
 
@@ -386,9 +382,9 @@ static bool copyBuffer(JNIEnv *env, jobject jMesh, const char* jBufferName, void
 		return false;
 	}
 
-	if (env->GetDirectBufferCapacity(jBuffer) != size)
+	if ((size_t)env->GetDirectBufferCapacity(jBuffer) != size)
 	{
-		lprintf("invalid direct buffer, expected %u, got %llu\n", size, env->GetDirectBufferCapacity(jBuffer));
+		lprintf("invalid direct buffer, expected %u, got %llu\n", (unsigned int)size, (long long unsigned int)env->GetDirectBufferCapacity(jBuffer));
 		return false;
 	}
 
@@ -419,9 +415,9 @@ static bool copyBufferArray(JNIEnv *env, jobject jMesh, const char* jBufferName,
 	jobject jBuffer = env->GetObjectArrayElement((jobjectArray) jBufferArray, index);
 	SmartLocalRef bufferRef(env, jBuffer);
 
-	if (env->GetDirectBufferCapacity(jBuffer) != size)
+	if ((size_t)env->GetDirectBufferCapacity(jBuffer) != size)
 	{
-		lprintf("invalid direct buffer, expected %u, got %llu\n", size, env->GetDirectBufferCapacity(jBuffer));
+		lprintf("invalid direct buffer, expected %u, got %llu\n", (unsigned int)size, (long long unsigned int)env->GetDirectBufferCapacity(jBuffer));
 		return false;
 	}
 
@@ -559,7 +555,7 @@ class JavaIOSystem : public Assimp::IOSystem {
 	    }
 	    
 	    size_t size = calli(mJniEnv, jStream, "jassimp/AiIOStream", "getFileSize", "()I");
-	    lprintf("Model file size is %d\n", size);
+	    lprintf("Model file size is %d\n", (int)size);
 	    
 	    char* buffer = (char*)malloc(size);
 	    jobject javaBuffer = mJniEnv->NewDirectByteBuffer(buffer, size);
@@ -735,7 +731,7 @@ static bool loadMeshes(JNIEnv *env, const aiScene* cScene, jobject& jScene)
 				if (faceBufferPos != faceBufferSize)
 				{
 					/* this should really not happen */
-					lprintf("faceBufferPos %u, faceBufferSize %u\n", faceBufferPos, faceBufferSize);
+					lprintf("faceBufferPos %lu, faceBufferSize %lu\n", faceBufferPos, faceBufferSize);
 					env->FatalError("error copying face data");
 					exit(-1);
 				}
@@ -888,7 +884,7 @@ static bool loadMeshes(JNIEnv *env, const aiScene* cScene, jobject& jScene)
 				if (coordBufferOffset != coordBufferSize)
 				{
 					/* this should really not happen */
-					lprintf("coordBufferPos %u, coordBufferSize %u\n", coordBufferOffset, coordBufferSize);
+					lprintf("coordBufferPos %lu, coordBufferSize %lu\n", coordBufferOffset, coordBufferSize);
 					env->FatalError("error copying coord data");
 					exit(-1);
 				}
