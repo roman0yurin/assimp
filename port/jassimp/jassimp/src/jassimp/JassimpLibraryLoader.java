@@ -60,6 +60,6 @@ public class JassimpLibraryLoader
     */
    public void loadLibrary()
    {
-      System.loadLibrary("jassimp");
+      //System.loadLibrary("jassimp"); За загрузку библиотеки отвечает c60.controller.cpp.ICppDependency.initNative()
    }
 }
