@@ -164,5 +164,5 @@ public enum AiShadingMode {
     /**
      * The mapped c/c++ integer enum value.
      */
-    private final int m_rawValue;
+    public final int m_rawValue;
 }

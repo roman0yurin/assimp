@@ -90,6 +90,13 @@ public final class AiMatrix4f {
     }
 
     /**
+     * Вернуть содержимое матрицы
+     **/
+    public float[] getData(){
+        return m_data;
+    }
+
+    /**
      * Stores the matrix in a new direct ByteBuffer with native byte order.
      * <p>
      * 
