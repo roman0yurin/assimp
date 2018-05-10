@@ -418,6 +418,7 @@ IF ( ASSIMP_BUILD_ASSIMP_TOOLS )
   # Why assimp_qt_viewer/CMakeLists.txt still contain similar check?
   # Because viewer can be build independently of Assimp.
   FIND_PACKAGE(Qt5Widgets QUIET)
+  set_property(TARGET Qt5::Core PROPERTY INTERFACE_COMPILE_FEATURES "")
   FIND_PACKAGE(DevIL QUIET)
   FIND_PACKAGE(OpenGL QUIET)
   IF ( Qt5Widgets_FOUND AND IL_FOUND AND OPENGL_FOUND)

@@ -89,7 +89,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #   endif
 #endif
 
-namespace glTF
+namespace GLTF
 {
 #ifdef ASSIMP_API
     using Assimp::IOStream;

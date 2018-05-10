@@ -53,7 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "glTFAsset.h"
 
-namespace glTF
+namespace GLTF
 {
 
 using rapidjson::MemoryPoolAllocator;
