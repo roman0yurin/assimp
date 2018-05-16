@@ -52,7 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace Assimp;
 
-namespace GLTF {
+namespace ASSIMP_GLTF {
 
 namespace {
 

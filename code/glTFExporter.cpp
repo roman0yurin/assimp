@@ -70,7 +70,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using namespace rapidjson;
 
 using namespace Assimp;
-using namespace GLTF;
+using namespace ASSIMP_GLTF;
 
 namespace Assimp {
 
@@ -112,7 +112,7 @@ glTFExporter::glTFExporter(const char* filename, IOSystem* pIOSystem, const aiSc
 
     mScene = sceneCopy.get();
 
-    mAsset.reset( new GLTF::Asset( pIOSystem ) );
+    mAsset.reset( new ASSIMP_GLTF::Asset( pIOSystem ) );
 
     if (isBinary) {
         mAsset->SetAsBinary();
@@ -138,7 +138,7 @@ glTFExporter::glTFExporter(const char* filename, IOSystem* pIOSystem, const aiSc
 
     ExportAnimations();
 
-    GLTF::AssetWriter writer(*mAsset);
+	ASSIMP_GLTF::AssetWriter writer(*mAsset);
 
     if (isBinary) {
         writer.WriteGLBFile(filename);
@@ -151,7 +151,7 @@ glTFExporter::glTFExporter(const char* filename, IOSystem* pIOSystem, const aiSc
  * Copy a 4x4 matrix from struct aiMatrix to typedef mat4.
  * Also converts from row-major to column-major storage.
  */
-static void CopyValue(const aiMatrix4x4& v, GLTF::mat4& o)
+static void CopyValue(const aiMatrix4x4& v, ASSIMP_GLTF::mat4& o)
 {
     o[ 0] = v.a1; o[ 1] = v.b1; o[ 2] = v.c1; o[ 3] = v.d1;
     o[ 4] = v.a2; o[ 5] = v.b2; o[ 6] = v.c2; o[ 7] = v.d2;
@@ -167,7 +167,7 @@ static void CopyValue(const aiMatrix4x4& v, aiMatrix4x4& o)
     o.d1 = v.d1; o.d2 = v.d2; o.d3 = v.d3; o.d4 = v.d4;
 }
 
-static void IdentityMatrix4(GLTF::mat4& o)
+static void IdentityMatrix4(ASSIMP_GLTF::mat4& o)
 {
     o[ 0] = 1; o[ 1] = 0; o[ 2] = 0; o[ 3] = 0;
     o[ 4] = 0; o[ 5] = 1; o[ 6] = 0; o[ 7] = 0;
@@ -248,7 +248,7 @@ namespace {
     }
 }
 
-void glTFExporter::GetTexSampler(const aiMaterial* mat, GLTF::TexProperty& prop)
+void glTFExporter::GetTexSampler(const aiMaterial* mat, ASSIMP_GLTF::TexProperty& prop)
 {
     std::string samplerId = mAsset->FindUniqueID("", "sampler");
     prop.texture->sampler = mAsset->samplers.Create(samplerId);
@@ -294,7 +294,7 @@ void glTFExporter::GetTexSampler(const aiMaterial* mat, GLTF::TexProperty& prop)
     prop.texture->sampler->minFilter = SamplerMinFilter_Linear;
 }
 
-void glTFExporter::GetMatColorOrTex(const aiMaterial* mat, GLTF::TexProperty& prop, const char* propName, int type, int idx, aiTextureType tt)
+void glTFExporter::GetMatColorOrTex(const aiMaterial* mat, ASSIMP_GLTF::TexProperty& prop, const char* propName, int type, int idx, aiTextureType tt)
 {
     aiString tex;
     aiColor4D col;
@@ -833,7 +833,7 @@ void glTFExporter::ExportScene()
 
 void glTFExporter::ExportMetadata()
 {
-    GLTF::AssetMetadata& asset = mAsset->asset;
+	ASSIMP_GLTF::AssetMetadata& asset = mAsset->asset;
     asset.version = "1.0";
 
     char buffer[256];

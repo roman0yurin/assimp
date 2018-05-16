@@ -60,7 +60,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "glTFAssetWriter.h"
 
 using namespace Assimp;
-using namespace GLTF;
+using namespace ASSIMP_GLTF;
 
 
 //
@@ -106,7 +106,7 @@ bool glTFImporter::CanRead(const std::string& pFile, IOSystem* pIOHandler, bool 
         return false;
 
     if (checkSig && pIOHandler) {
-        GLTF::Asset asset(pIOHandler);
+        ASSIMP_GLTF::Asset asset(pIOHandler);
         try {
             asset.Load(pFile, extension == "glb");
             std::string version = asset.asset.version;
@@ -126,27 +126,27 @@ bool glTFImporter::CanRead(const std::string& pFile, IOSystem* pIOHandler, bool 
 //    out.r = v[0]; out.g = v[1]; out.b = v[2];
 //}
 
-static void CopyValue(const GLTF::vec4& v, aiColor4D& out)
+static void CopyValue(const ASSIMP_GLTF::vec4& v, aiColor4D& out)
 {
     out.r = v[0]; out.g = v[1]; out.b = v[2]; out.a = v[3];
 }
 
-static void CopyValue(const GLTF::vec4& v, aiColor3D& out)
+static void CopyValue(const ASSIMP_GLTF::vec4& v, aiColor3D& out)
 {
     out.r = v[0]; out.g = v[1]; out.b = v[2];
 }
 
-static void CopyValue(const GLTF::vec3& v, aiVector3D& out)
+static void CopyValue(const ASSIMP_GLTF::vec3& v, aiVector3D& out)
 {
     out.x = v[0]; out.y = v[1]; out.z = v[2];
 }
 
-static void CopyValue(const GLTF::vec4& v, aiQuaternion& out)
+static void CopyValue(const ASSIMP_GLTF::vec4& v, aiQuaternion& out)
 {
     out.x = v[0]; out.y = v[1]; out.z = v[2]; out.w = v[3];
 }
 
-static void CopyValue(const GLTF::mat4& v, aiMatrix4x4& o)
+static void CopyValue(const ASSIMP_GLTF::mat4& v, aiMatrix4x4& o)
 {
     o.a1 = v[ 0]; o.b1 = v[ 1]; o.c1 = v[ 2]; o.d1 = v[ 3];
     o.a2 = v[ 4]; o.b2 = v[ 5]; o.c2 = v[ 6]; o.d2 = v[ 7];
@@ -154,7 +154,7 @@ static void CopyValue(const GLTF::mat4& v, aiMatrix4x4& o)
     o.a4 = v[12]; o.b4 = v[13]; o.c4 = v[14]; o.d4 = v[15];
 }
 
-inline void SetMaterialColorProperty(std::vector<int>& embeddedTexIdxs, Asset& /*r*/, GLTF::TexProperty prop, aiMaterial* mat,
+inline void SetMaterialColorProperty(std::vector<int>& embeddedTexIdxs, Asset& /*r*/, ASSIMP_GLTF::TexProperty prop, aiMaterial* mat,
     aiTextureType texType, const char* pKey, unsigned int type, unsigned int idx)
 {
     if (prop.texture) {
@@ -178,7 +178,7 @@ inline void SetMaterialColorProperty(std::vector<int>& embeddedTexIdxs, Asset& /
     }
 }
 
-void glTFImporter::ImportMaterials(GLTF::Asset& r)
+void glTFImporter::ImportMaterials(ASSIMP_GLTF::Asset& r)
 {
     mScene->mNumMaterials = unsigned(r.materials.Size());
     mScene->mMaterials = new aiMaterial*[mScene->mNumMaterials];
@@ -248,7 +248,7 @@ static inline bool CheckValidFacesIndices(aiFace* faces, unsigned nFaces, unsign
 }
 #endif // ASSIMP_BUILD_DEBUG
 
-void glTFImporter::ImportMeshes(GLTF::Asset& r)
+void glTFImporter::ImportMeshes(ASSIMP_GLTF::Asset& r)
 {
     std::vector<aiMesh*> meshes;
 
@@ -431,7 +431,7 @@ void glTFImporter::ImportMeshes(GLTF::Asset& r)
     CopyVector(meshes, mScene->mMeshes, mScene->mNumMeshes);
 }
 
-void glTFImporter::ImportCameras(GLTF::Asset& r)
+void glTFImporter::ImportCameras(ASSIMP_GLTF::Asset& r)
 {
     if (!r.cameras.Size()) return;
 
@@ -456,7 +456,7 @@ void glTFImporter::ImportCameras(GLTF::Asset& r)
     }
 }
 
-void glTFImporter::ImportLights(GLTF::Asset& r)
+void glTFImporter::ImportLights(ASSIMP_GLTF::Asset& r)
 {
     if (!r.lights.Size()) return;
 
@@ -496,7 +496,7 @@ void glTFImporter::ImportLights(GLTF::Asset& r)
 }
 
 
-aiNode* ImportNode(aiScene* pScene, GLTF::Asset& r, std::vector<unsigned int>& meshOffsets, GLTF::Ref<GLTF::Node>& ptr)
+aiNode* ImportNode(aiScene* pScene, ASSIMP_GLTF::Asset& r, std::vector<unsigned int>& meshOffsets, ASSIMP_GLTF::Ref<ASSIMP_GLTF::Node>& ptr)
 {
     Node& node = *ptr;
 
@@ -572,7 +572,7 @@ aiNode* ImportNode(aiScene* pScene, GLTF::Asset& r, std::vector<unsigned int>& m
     return ainode;
 }
 
-void glTFImporter::ImportNodes(GLTF::Asset& r)
+void glTFImporter::ImportNodes(ASSIMP_GLTF::Asset& r)
 {
     if (!r.scene) return;
 
@@ -599,7 +599,7 @@ void glTFImporter::ImportNodes(GLTF::Asset& r)
     //}
 }
 
-void glTFImporter::ImportEmbeddedTextures(GLTF::Asset& r)
+void glTFImporter::ImportEmbeddedTextures(ASSIMP_GLTF::Asset& r)
 {
     embeddedTexIdxs.resize(r.images.Size(), -1);
 
@@ -650,7 +650,7 @@ void glTFImporter::InternReadFile(const std::string& pFile, aiScene* pScene, IOS
     this->mScene = pScene;
 
     // read the asset file
-    GLTF::Asset asset(pIOHandler);
+    ASSIMP_GLTF::Asset asset(pIOHandler);
     asset.Load(pFile, GetExtension(pFile) == "glb");
 
 

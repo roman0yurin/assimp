@@ -59,7 +59,7 @@ struct aiScene;
 struct aiNode;
 struct aiMaterial;
 
-namespace GLTF
+namespace ASSIMP_GLTF
 {
     template<class T>
     class Ref;
@@ -94,19 +94,19 @@ namespace Assimp
 
         std::map<std::string, unsigned int> mTexturesByPath;
 
-        std::shared_ptr<GLTF::Asset> mAsset;
+        std::shared_ptr<ASSIMP_GLTF::Asset> mAsset;
 
         std::vector<unsigned char> mBodyData;
 
         void WriteBinaryData(IOStream* outfile, std::size_t sceneLength);
 
-        void GetTexSampler(const aiMaterial* mat, GLTF::TexProperty& prop);
-        void GetMatColorOrTex(const aiMaterial* mat, GLTF::TexProperty& prop, const char* propName, int type, int idx, aiTextureType tt);
+        void GetTexSampler(const aiMaterial* mat, ASSIMP_GLTF::TexProperty& prop);
+        void GetMatColorOrTex(const aiMaterial* mat, ASSIMP_GLTF::TexProperty& prop, const char* propName, int type, int idx, aiTextureType tt);
         void ExportMetadata();
         void ExportMaterials();
         void ExportMeshes();
         unsigned int ExportNodeHierarchy(const aiNode* n);
-        unsigned int ExportNode(const aiNode* node, GLTF::Ref<GLTF::Node>& parent);
+        unsigned int ExportNode(const aiNode* node, ASSIMP_GLTF::Ref<ASSIMP_GLTF::Node>& parent);
         void ExportScene();
         void ExportAnimations();
     };

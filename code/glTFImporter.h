@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 struct aiNode;
 
 
-namespace GLTF
+namespace ASSIMP_GLTF
 {
     class Asset;
 }
@@ -76,12 +76,12 @@ private:
 
     aiScene* mScene;
 
-    void ImportEmbeddedTextures(GLTF::Asset& a);
-    void ImportMaterials(GLTF::Asset& a);
-    void ImportMeshes(GLTF::Asset& a);
-    void ImportCameras(GLTF::Asset& a);
-    void ImportLights(GLTF::Asset& a);
-    void ImportNodes(GLTF::Asset& a);
+    void ImportEmbeddedTextures(ASSIMP_GLTF::Asset& a);
+    void ImportMaterials(ASSIMP_GLTF::Asset& a);
+    void ImportMeshes(ASSIMP_GLTF::Asset& a);
+    void ImportCameras(ASSIMP_GLTF::Asset& a);
+    void ImportLights(ASSIMP_GLTF::Asset& a);
+    void ImportNodes(ASSIMP_GLTF::Asset& a);
 
 };
 

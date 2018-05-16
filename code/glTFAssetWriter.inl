@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <rapidjson/writer.h>
 #include <rapidjson/prettywriter.h>
 
-namespace GLTF {
+namespace ASSIMP_GLTF {
 
     using rapidjson::StringBuffer;
     using rapidjson::PrettyWriter;
