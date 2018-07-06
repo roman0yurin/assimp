@@ -179,7 +179,7 @@ void IFCImporter::InternReadFile( const std::string& pFile,
     // if this is a ifczip file, decompress its contents first
     if(GetExtension(pFile) == "ifczip") {
 #ifndef ASSIMP_BUILD_NO_COMPRESSED_IFC
-        unzFile zip = unzOpen( pFile.c_str() );
+        assimp_unzFile zip = assimp_unzOpen(pFile.c_str());
         if(zip == NULL) {
             ThrowException("Could not open ifczip file for reading, unzip failed");
         }
@@ -196,30 +196,30 @@ void IFCImporter::InternReadFile( const std::string& pFile,
         }
 
         // search file (same name as the IFCZIP except for the file extension) and place file pointer there
-        if(UNZ_OK == unzGoToFirstFile(zip)) {
+        if(UNZ_OK == assimp_unzGoToFirstFile(zip)) {
             do {
                 // get file size, etc.
-                unz_file_info fileInfo;
+                assimp_unz_file_info fileInfo;
                 char filename[256];
-                unzGetCurrentFileInfo( zip , &fileInfo, filename, sizeof(filename), 0, 0, 0, 0 );
+                assimp_unzGetCurrentFileInfo(zip, &fileInfo, filename, sizeof(filename), 0, 0, 0, 0);
                 if (GetExtension(filename) != "ifc") {
                     continue;
                 }
                 uint8_t* buff = new uint8_t[fileInfo.uncompressed_size];
                 LogInfo("Decompressing IFCZIP file");
-                unzOpenCurrentFile( zip  );
-                const int ret = unzReadCurrentFile( zip, buff, fileInfo.uncompressed_size);
+                assimp_unzOpenCurrentFile(zip);
+                const int ret = assimp_unzReadCurrentFile(zip, buff, fileInfo.uncompressed_size);
                 size_t filesize = fileInfo.uncompressed_size;
                 if ( ret < 0 || size_t(ret) != filesize )
                 {
                     delete[] buff;
                     ThrowException("Failed to decompress IFC ZIP file");
                 }
-                unzCloseCurrentFile( zip );
+                assimp_unzCloseCurrentFile(zip);
                 stream.reset(new MemoryIOStream(buff,fileInfo.uncompressed_size,true));
                 break;
 
-                if (unzGoToNextFile(zip) == UNZ_END_OF_LIST_OF_FILE) {
+                if (assimp_unzGoToNextFile(zip) == UNZ_END_OF_LIST_OF_FILE) {
                     ThrowException("Found no IFC file member in IFCZIP file (1)");
                 }
 
@@ -229,7 +229,7 @@ void IFCImporter::InternReadFile( const std::string& pFile,
             ThrowException("Found no IFC file member in IFCZIP file (2)");
         }
 
-        unzClose(zip);
+        assimp_unzClose(zip);
 #else
         ThrowException("Could not open ifczip file for reading, assimp was built without ifczip support");
 #endif

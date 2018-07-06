@@ -239,7 +239,7 @@ private:
     bool mapArchive();
 
 private:
-    unzFile m_ZipFileHandle;
+    assimp_unzFile m_ZipFileHandle;
     std::map<std::string, ZipFile*> m_ArchiveMap;
 };
 
@@ -251,7 +251,7 @@ D3MFZipArchive::D3MFZipArchive(IOSystem* pIOHandler, const std::string& rFile)
     if (! rFile.empty()) {                
         zlib_filefunc_def mapping = IOSystem2Unzip::get(pIOHandler);            
 
-        m_ZipFileHandle = unzOpen2(rFile.c_str(), &mapping);
+        m_ZipFileHandle = assimp_unzOpen2(rFile.c_str(), &mapping);
         if(m_ZipFileHandle != NULL) {            
             mapArchive();
         }
@@ -267,7 +267,7 @@ D3MFZipArchive::~D3MFZipArchive() {
     m_ArchiveMap.clear();
 
     if(m_ZipFileHandle != NULL) {
-        unzClose(m_ZipFileHandle);
+        assimp_unzClose(m_ZipFileHandle);
         m_ZipFileHandle = NULL;
     }
 }
@@ -349,27 +349,29 @@ bool D3MFZipArchive::mapArchive() {
     if(m_ZipFileHandle != NULL) {
         if(m_ArchiveMap.empty()) {
             //  At first ensure file is already open
-            if(unzGoToFirstFile(m_ZipFileHandle) == UNZ_OK) {
+            if(assimp_unzGoToFirstFile(m_ZipFileHandle) == UNZ_OK) {
                 // Loop over all files
                 do {
                     char filename[FileNameSize];
-                    unz_file_info fileInfo;
+                    assimp_unz_file_info fileInfo;
 
-                    if(unzGetCurrentFileInfo(m_ZipFileHandle, &fileInfo, filename, FileNameSize, NULL, 0, NULL, 0) == UNZ_OK) {
+                    if(assimp_unzGetCurrentFileInfo(m_ZipFileHandle, &fileInfo, filename, FileNameSize, NULL, 0, NULL,
+                                                    0) == UNZ_OK) {
                         // The file has EXACTLY the size of uncompressed_size. In C
                         // you need to mark the last character with '\0', so add
                         // another character
-                        if(fileInfo.uncompressed_size != 0 && unzOpenCurrentFile(m_ZipFileHandle) == UNZ_OK) {
+                        if(fileInfo.uncompressed_size != 0 && assimp_unzOpenCurrentFile(m_ZipFileHandle) == UNZ_OK) {
                             std::pair<std::map<std::string, ZipFile*>::iterator, bool> result = m_ArchiveMap.insert(std::make_pair(filename, new ZipFile(fileInfo.uncompressed_size)));
 
-                            if(unzReadCurrentFile(m_ZipFileHandle, result.first->second->m_Buffer, fileInfo.uncompressed_size) == (long int) fileInfo.uncompressed_size) {
-                                if(unzCloseCurrentFile(m_ZipFileHandle) == UNZ_OK) {
+                            if(assimp_unzReadCurrentFile(m_ZipFileHandle, result.first->second->m_Buffer,
+                                                         fileInfo.uncompressed_size) == (long int) fileInfo.uncompressed_size) {
+                                if(assimp_unzCloseCurrentFile(m_ZipFileHandle) == UNZ_OK) {
                                     // Nothing to do anymore...
                                 }
                             }
                         }
                     }
-                } while(unzGoToNextFile(m_ZipFileHandle) != UNZ_END_OF_LIST_OF_FILE);
+                } while(assimp_unzGoToNextFile(m_ZipFileHandle) != UNZ_END_OF_LIST_OF_FILE);
             }
         }
 

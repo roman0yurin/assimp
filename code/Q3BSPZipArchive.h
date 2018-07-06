@@ -118,7 +118,7 @@ private:
     bool mapArchive();
 
 private:
-    unzFile m_ZipFileHandle;
+    assimp_unzFile m_ZipFileHandle;
     std::map<std::string, ZipFile*> m_ArchiveMap;
 };
 
