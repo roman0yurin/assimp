@@ -417,8 +417,10 @@ IF ( ASSIMP_BUILD_ASSIMP_TOOLS )
   # Why here? Maybe user do not want Qt viewer and have no Qt.
   # Why assimp_qt_viewer/CMakeLists.txt still contain similar check?
   # Because viewer can be build independently of Assimp.
+  IF(NOT IS_ASTRA)
   FIND_PACKAGE(Qt5Widgets QUIET)
   set_property(TARGET Qt5::Core PROPERTY INTERFACE_COMPILE_FEATURES "")
+   ENDIF(IS_ASTRA)
   FIND_PACKAGE(DevIL QUIET)
   FIND_PACKAGE(OpenGL QUIET)
   IF ( Qt5Widgets_FOUND AND IL_FOUND AND OPENGL_FOUND)
